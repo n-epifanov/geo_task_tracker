@@ -5,7 +5,9 @@ defmodule GeoTaskTrackerWeb.Router do
     plug :accepts, ["json"]
   end
 
-  scope "/api", GeoTaskTrackerWeb do
+  scope "/api/v1", GeoTaskTrackerWeb do
     pipe_through :api
+
+    resources "/tasks", TaskController, except: [:new, :edit]
   end
 end

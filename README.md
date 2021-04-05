@@ -3,6 +3,10 @@
 Geo-based tasks tracker.
 This is a solution to a [task explained here](./TASK.md).
 
+Simplifications due to the nature of the job application:
+- no API documentation;
+- auth tokens are plain strings stored in DB;
+- path to task assumed to be a straight line.
 # Dev setup:
 
 Setup DB with PostGIS:
@@ -22,6 +26,9 @@ mix ecto.migrate
 ```
 sudo apt install qgis
 ```
+
+Manager:
+http post localhost:4000/api/v1/tasks pickup:='{"lat": 55, "lon": 66}' delivery:='{"lat": 55, "lon": 66}'
 
 
 To start your Phoenix server:
