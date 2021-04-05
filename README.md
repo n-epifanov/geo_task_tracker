@@ -1,5 +1,8 @@
 # GeoTaskTracker
 
+Geo-based tasks tracker.
+This is a solution to a [task explained here](./TASK.md).
+
 To start your Phoenix server:
 
   * Install dependencies with `mix deps.get`
