@@ -18,6 +18,11 @@ config :geo_task_tracker, GeoTaskTrackerWeb.Endpoint,
   pubsub_server: GeoTaskTracker.PubSub,
   live_view: [signing_salt: "2ZATNjcC"]
 
+config :geo_task_tracker, GeoTaskTracker.Repo, types: GeoTaskTracker.PostgresTypes
+
+config :geo_postgis,
+  json_library: Jason
+
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",

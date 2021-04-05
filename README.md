@@ -3,6 +3,27 @@
 Geo-based tasks tracker.
 This is a solution to a [task explained here](./TASK.md).
 
+# Dev setup:
+
+Setup DB with PostGIS:
+```
+sudo apt-get install postgresql-13-postgis-3
+mix ecto.create
+
+sudo -u postgres psql geo_task_tracker_dev
+# In psql:
+create extension if not exists plpgsql;
+create extension postgis;
+
+mix ecto.migrate
+```
+
+(Optional) install GUI application for viewing Geo data:
+```
+sudo apt install qgis
+```
+
+
 To start your Phoenix server:
 
   * Install dependencies with `mix deps.get`
