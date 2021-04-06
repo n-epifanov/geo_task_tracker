@@ -1,7 +1,7 @@
 defmodule GeoTaskTracker.Repo.Migrations.CreateTasks do
   use Ecto.Migration
 
-  def change do
+  def up do
     create table(:tasks) do
       add :status, :string
       add :pickup, :geometry
@@ -9,5 +9,7 @@ defmodule GeoTaskTracker.Repo.Migrations.CreateTasks do
 
       timestamps()
     end
+
+    execute("CREATE INDEX tasks_pickup_idx ON tasks USING GIST (pickup);")
   end
 end

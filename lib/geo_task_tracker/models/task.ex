@@ -37,4 +37,29 @@ defmodule GeoTaskTracker.Models.Task do
       status: :new
     })
   end
+
+  def find_nearest(lon, lat) do
+    driver_pos = %Geo.Point{coordinates: {lon, lat}}
+    range = 1000
+
+    query =
+      from task in Task,
+        where: task.status == :new and st_dwithin_in_meters(^driver_pos, task.pickup, ^range),
+        select: %{
+          id: task.id,
+          lon: st_x(task.pickup),
+          lat: st_y(task.pickup),
+          distance: st_distance_in_meters(^driver_pos, task.pickup)
+        },
+        order_by: st_distance_in_meters(^driver_pos, task.pickup),
+        limit: 5
+
+    Repo.all(query)
+  end
+
+  def update!(id, changes) do
+    Repo.get!(Task, id)
+    |> Task.changeset(changes)
+    |> Repo.update!()
+  end
 end

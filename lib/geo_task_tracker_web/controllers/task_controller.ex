@@ -6,9 +6,14 @@ defmodule GeoTaskTrackerWeb.TaskController do
 
   action_fallback GeoTaskTrackerWeb.FallbackController
 
-  def index(conn, _params) do
-    tasks = Tracker.list_tasks()
-    render(conn, "index.json", tasks: tasks)
+  def index(conn, params_unsafe) do
+    with {:ok, position} <- validate_geopoint(params_unsafe) do
+      tasks = Task.find_nearest(position.lon, position.lat)
+      render(conn, "index.json", tasks: tasks)
+    else
+      {:error, changeset} ->
+        render_error(conn, changeset)
+    end
   end
 
   def create(conn, params) do
@@ -19,9 +24,7 @@ defmodule GeoTaskTrackerWeb.TaskController do
       render(conn, "ok.json")
     else
       {:error, changeset} ->
-        conn
-        |> put_view(GeoTaskTrackerWeb.ChangesetView)
-        |> render("error.json", changeset: changeset)
+        render_error(conn, changeset)
     end
   end
 
@@ -30,12 +33,9 @@ defmodule GeoTaskTrackerWeb.TaskController do
     render(conn, "show.json", task: task)
   end
 
-  def update(conn, %{"id" => id, "task" => task_params}) do
-    task = Tracker.get_task!(id)
-
-    with {:ok, %Task{} = task} <- Tracker.update_task(task, task_params) do
-      render(conn, "show.json", task: task)
-    end
+  def update(conn, %{"id" => id, "status" => status}) do
+    Task.update!(id, %{"status" => status})
+    render(conn, "ok.json")
   end
 
   def delete(conn, %{"id" => id}) do
@@ -66,5 +66,11 @@ defmodule GeoTaskTrackerWeb.TaskController do
     else
       {:error, changeset}
     end
+  end
+
+  defp render_error(conn, %Ecto.Changeset{} = changeset) do
+    conn
+    |> put_view(GeoTaskTrackerWeb.ChangesetView)
+    |> render("error.json", changeset: changeset)
   end
 end

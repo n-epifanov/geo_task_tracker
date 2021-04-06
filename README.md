@@ -7,6 +7,10 @@ Simplifications due to the nature of the job application:
 - no API documentation;
 - auth tokens are plain strings stored in DB;
 - path to task assumed to be a straight line.
+TODO:
+- decent test coverage
+- describe error in respond on request failure
+
 # Dev setup:
 
 Setup DB with PostGIS:
@@ -26,6 +30,12 @@ mix ecto.migrate
 ```
 sudo apt install qgis
 ```
+
+Driver:
+list:
+http localhost:4000/api/v1/tasks lat==45 lon==66
+change status:
+http PATCH localhost:4000/api/v1/tasks/9 status=done
 
 Manager:
 http post localhost:4000/api/v1/tasks pickup:='{"lat": 55, "lon": 66}' delivery:='{"lat": 55, "lon": 66}'

@@ -7,7 +7,7 @@ defmodule GeoTaskTrackerWeb.TaskView do
   end
 
   def render("index.json", %{tasks: tasks}) do
-    %{data: render_many(tasks, TaskView, "task.json")}
+    %{status: :ok, tasks: render_many(tasks, TaskView, "task.json")}
   end
 
   def render("show.json", %{task: task}) do
@@ -15,6 +15,6 @@ defmodule GeoTaskTrackerWeb.TaskView do
   end
 
   def render("task.json", %{task: task}) do
-    %{id: task.id}
+    %{id: task.id, lon: task.lon, lat: task.lat}
   end
 end
