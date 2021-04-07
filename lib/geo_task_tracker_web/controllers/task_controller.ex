@@ -1,7 +1,6 @@
 defmodule GeoTaskTrackerWeb.TaskController do
   use GeoTaskTrackerWeb, :controller
 
-  alias GeoTaskTracker.Tracker
   alias GeoTaskTracker.Models.Task
 
   action_fallback GeoTaskTrackerWeb.FallbackController
@@ -30,11 +29,6 @@ defmodule GeoTaskTrackerWeb.TaskController do
       {:error, changeset} ->
         render_error(conn, changeset)
     end
-  end
-
-  def show(conn, %{"id" => id}) do
-    task = Tracker.get_task!(id)
-    render(conn, "show.json", task: task)
   end
 
   def update(conn, %{"id" => id, "status" => status}) do

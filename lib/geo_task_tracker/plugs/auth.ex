@@ -6,7 +6,7 @@ defmodule GeoTaskTrackerWeb.Plugs.Auth do
   import Phoenix.Controller
   require Logger
 
-  @roles [:driver, :manager]
+  @load_atoms [:driver, :manager]
 
   def init(opts), do: opts
 

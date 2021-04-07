@@ -10,6 +10,6 @@ defmodule GeoTaskTrackerWeb.Router do
   scope "/api/v1", GeoTaskTrackerWeb do
     pipe_through :api
 
-    resources "/tasks", TaskController, except: [:new, :edit, :delete]
+    resources "/tasks", TaskController, only: [:index, :create, :update]
   end
 end
