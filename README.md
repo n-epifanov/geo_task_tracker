@@ -10,6 +10,8 @@ Simplifications due to the nature of the job application:
 TODO:
 - decent test coverage
 - describe error in respond on request failure
+- return valid response codes on error like 4xx etc
+- setup prod environment and deploy
 
 # Dev setup:
 
@@ -24,6 +26,7 @@ create extension if not exists plpgsql;
 create extension postgis;
 
 mix ecto.migrate
+mix run priv/repo/seeds.exs
 ```
 
 (Optional) install GUI application for viewing Geo data:
@@ -33,13 +36,18 @@ sudo apt install qgis
 
 Driver:
 list:
-http localhost:4000/api/v1/tasks lat==45 lon==66
+http localhost:4000/api/v1/tasks Authorization:"Bearer some_valid_driver_token" lat==45 lon==66
 change status:
-http PATCH localhost:4000/api/v1/tasks/9 status=done
+http PATCH localhost:4000/api/v1/tasks/9 Authorization:"Bearer some_valid_driver_token" status=done
 
 Manager:
-http post localhost:4000/api/v1/tasks pickup:='{"lat": 55, "lon": 66}' delivery:='{"lat": 55, "lon": 66}'
+http post localhost:4000/api/v1/tasks Authorization:"Bearer some_valid_manager_token" pickup:='{"lat": 55, "lon": 66}' delivery:='{"lat": 55, "lon": 66}'
 
+Tokens:
+some_valid_driver_token
+another_valid_driver_token
+some_valid_manager_token
+another_valid_manager_token
 
 To start your Phoenix server:
 

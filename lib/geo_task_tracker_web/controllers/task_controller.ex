@@ -18,11 +18,15 @@ defmodule GeoTaskTrackerWeb.TaskController do
 
   def create(conn, params) do
     with %{"pickup" => pickup_unsafe, "delivery" => delivery_unsafe} <- params,
+         :ok <- validate_access(conn, :manager),
          {:ok, pickup} <- validate_geopoint(pickup_unsafe),
          {:ok, delivery} <- validate_geopoint(delivery_unsafe) do
       _ = Task.create!({pickup.lon, pickup.lat}, {delivery.lon, delivery.lat})
       render(conn, "ok.json")
     else
+      {:error, :unauthorized} ->
+        render_unauthorized(conn)
+
       {:error, changeset} ->
         render_error(conn, changeset)
     end
@@ -34,15 +38,12 @@ defmodule GeoTaskTrackerWeb.TaskController do
   end
 
   def update(conn, %{"id" => id, "status" => status}) do
-    Task.update!(id, %{"status" => status})
-    render(conn, "ok.json")
-  end
-
-  def delete(conn, %{"id" => id}) do
-    task = Tracker.get_task!(id)
-
-    with {:ok, %Task{}} <- Tracker.delete_task(task) do
-      send_resp(conn, :no_content, "")
+    with :ok <- validate_access(conn, :driver) do
+      Task.update!(id, %{"status" => status})
+      render(conn, "ok.json")
+    else
+      _ ->
+        render_unauthorized(conn)
     end
   end
 
@@ -68,9 +69,24 @@ defmodule GeoTaskTrackerWeb.TaskController do
     end
   end
 
+  defp validate_access(conn, role) do
+    if conn.assigns[:role] == role do
+      :ok
+    else
+      {:error, :unauthorized}
+    end
+  end
+
   defp render_error(conn, %Ecto.Changeset{} = changeset) do
     conn
     |> put_view(GeoTaskTrackerWeb.ChangesetView)
     |> render("error.json", changeset: changeset)
+  end
+
+  defp render_unauthorized(conn) do
+    conn
+    |> put_status(403)
+    |> put_view(GeoTaskTrackerWeb.ErrorView)
+    |> render("403.json")
   end
 end

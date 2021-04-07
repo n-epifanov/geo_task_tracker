@@ -1,6 +1,10 @@
 defmodule GeoTaskTrackerWeb.ErrorView do
   use GeoTaskTrackerWeb, :view
 
+  def render("403.json", _assigns) do
+    %{status: "error", error_reason: "forbidden"}
+  end
+
   # If you want to customize a particular status code
   # for a certain format, you may uncomment below.
   # def render("500.json", _assigns) do
