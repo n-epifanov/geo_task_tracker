@@ -11,9 +11,18 @@ Simplifications due to the nature of the job application:
 TODO:
 - decent test coverage;
 - describe error in respond on request failure;
-- setup prod environment and deploy;
+- setup prod environment and deploy configs;
 - fix compile warnings;
-- make sure DB index works alright.
+- make sure DB index works alright;
+- make all migrations reversible;
+- send metrics (e.g. to InfluxDB);
+- report errors (e.g. to Sentry);
+- setup logging to file for prod environment;
+- tighten DB column data types;
+- see a possible simplification with accessing geometry fields as a struct
+instead of PostGIS getters;
+- probably a Phoenix bug: Ecto.Enum error message is not supported by default
+ErrorHelpers.translate_error/1;
 
 ## Dev setup:
 
