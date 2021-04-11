@@ -66,7 +66,10 @@ defmodule GeoTaskTrackerWeb.TaskControllerTest do
           delivery: %{lat: 77, lon: 88}
         )
 
-      assert json_response(conn, 200) == %{"error_reason" => %{"lat" => ["is invalid"]}, "status" => "error"}
+      assert json_response(conn, 200) == %{
+               "error_reason" => %{"lat" => ["is invalid"]},
+               "status" => "error"
+             }
     end
   end
 end
