@@ -70,6 +70,7 @@ defmodule GeoTaskTrackerWeb.TaskController do
 
   defp render_error(conn, %Ecto.Changeset{} = changeset) do
     conn
+    |> put_status(400)
     |> put_view(GeoTaskTrackerWeb.ChangesetView)
     |> render("error.json", changeset: changeset)
   end
