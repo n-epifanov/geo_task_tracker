@@ -20,17 +20,25 @@ Repo.insert!(%Token{token: "some_valid_manager_token", role: "manager"})
 Repo.insert!(%Token{token: "another_valid_manager_token", role: "manager"})
 
 Repo.insert!(%Task{
-  delivery: %Geo.Point{coordinates: {44, 45}},
   pickup: %Geo.Point{coordinates: {55, 56}},
+  delivery: %Geo.Point{coordinates: {66, 67}},
   status: :new
 })
+
 Repo.insert!(%Task{
-  delivery: %Geo.Point{coordinates: {44.001, 45}},
-  pickup: %Geo.Point{coordinates: {55, 56}},
+  pickup: %Geo.Point{coordinates: {55.001, 56}},
+  delivery: %Geo.Point{coordinates: {66.001, 67}},
   status: :new
 })
+
 Repo.insert!(%Task{
-  delivery: %Geo.Point{coordinates: {44, 45}},
+  pickup: %Geo.Point{coordinates: {55.01, 56}},
+  delivery: %Geo.Point{coordinates: {66.01, 67}},
+  status: :new
+})
+
+Repo.insert!(%Task{
   pickup: %Geo.Point{coordinates: {55, 56}},
+  delivery: %Geo.Point{coordinates: {66, 67}},
   status: :done
 })

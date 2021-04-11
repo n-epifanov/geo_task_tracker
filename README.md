@@ -52,17 +52,17 @@ ErrorHelpers.translate_error/1;
 ### Driver:
 List nearby (1 km) tasks:
 ```
-http localhost:4000/api/v1/tasks Authorization:"Bearer some_valid_driver_token" lat==45 lon==66
+http localhost:4000/api/v1/tasks Authorization:"Bearer some_valid_driver_token" lon==55 lat==56
 ```
 Change task status:
 ```
-http PATCH localhost:4000/api/v1/tasks/9 Authorization:"Bearer some_valid_driver_token" status=done
+http PATCH localhost:4000/api/v1/tasks/1 Authorization:"Bearer some_valid_driver_token" status=done
 ```
 
 ### Manager:
 Create task:
 ```
-http post localhost:4000/api/v1/tasks Authorization:"Bearer some_valid_manager_token" pickup:='{"lat": 55, "lon": 66}' delivery:='{"lat": 55, "lon": 66}'
+http post localhost:4000/api/v1/tasks Authorization:"Bearer some_valid_manager_token" pickup:='{"lon": 55, "lat": 56}' delivery:='{"lon": 66, "lat": 67}'
 ```
 
 ### Tokens provided with seeds:
