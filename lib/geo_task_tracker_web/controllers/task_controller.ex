@@ -10,8 +10,8 @@ defmodule GeoTaskTrackerWeb.TaskController do
       tasks = Task.find_nearest(position.lon, position.lat)
       render(conn, "index.json", tasks: tasks)
     else
-      {:error, changeset} ->
-        render_error(conn, changeset)
+      {:error, reason} ->
+        render_error(conn, reason)
     end
   end
 
@@ -23,21 +23,18 @@ defmodule GeoTaskTrackerWeb.TaskController do
       _ = Task.create!({pickup.lon, pickup.lat}, {delivery.lon, delivery.lat})
       render(conn, "ok.json")
     else
-      {:error, :unauthorized} ->
-        render_unauthorized(conn)
-
-      {:error, changeset} ->
-        render_error(conn, changeset)
+      {:error, reason} ->
+        render_error(conn, reason)
     end
   end
 
   def update(conn, %{"id" => id, "status" => status}) do
-    with :ok <- validate_access(conn, :driver) do
-      Task.update!(id, %{"status" => status})
+    with :ok <- validate_access(conn, :driver),
+         {:ok, _} <- Task.update(id, %{"status" => status}) do
       render(conn, "ok.json")
     else
-      _ ->
-        render_unauthorized(conn)
+      {:error, reason} ->
+        render_error(conn, reason)
     end
   end
 
@@ -77,7 +74,7 @@ defmodule GeoTaskTrackerWeb.TaskController do
     |> render("error.json", changeset: changeset)
   end
 
-  defp render_unauthorized(conn) do
+  defp render_error(conn, :unauthorized) do
     conn
     |> put_status(403)
     |> put_view(GeoTaskTrackerWeb.ErrorView)

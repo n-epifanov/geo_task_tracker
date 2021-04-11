@@ -22,6 +22,7 @@ defmodule GeoTaskTracker.Models.Task do
     task
     |> cast(attrs, [:status, :pickup, :delivery])
     |> validate_required([:status, :pickup, :delivery])
+    |> validate_status_transition()
   end
 
   def create!(
@@ -57,9 +58,25 @@ defmodule GeoTaskTracker.Models.Task do
     Repo.all(query)
   end
 
-  def update!(id, changes) do
+  def update(id, changes) do
     Repo.get!(Task, id)
     |> Task.changeset(changes)
-    |> Repo.update!()
+    |> Repo.update()
+  end
+
+  defp validate_status_transition(%Ecto.Changeset{data: task} = changeset) do
+    %Task{status: old_value} = task
+
+    validate_change(changeset, :status, fn :status, new_value ->
+      status_transition(old_value, new_value)
+    end)
+  end
+
+  defp status_transition(:new, :assigned), do: []
+
+  defp status_transition(:assigned, :done), do: []
+
+  defp status_transition(old, new) do
+    [status: "invalid transition from #{old} to #{new}"]
   end
 end
